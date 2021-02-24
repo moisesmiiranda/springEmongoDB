@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.moisesmiiranda.projetomongo.domain.User;
+import com.moisesmiiranda.projetomongo.dto.UserDTO;
 import com.moisesmiiranda.projetomongo.repository.UserRepository;
 import com.moisesmiiranda.projetomongo.services.exception.ObjectNotFoundException;
 
@@ -22,5 +23,13 @@ public class UserService {//serviço
 	public User findById(String id) {
 		Optional<User> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
+	}
+	
+	public User insert(User obj) {
+		return repo.insert(obj);
+	}
+	
+	public User fromDTO(UserDTO objDto) {
+		return new User(objDto.getId(), objDto.getName(), objDto.getEmail());
 	}
 }
