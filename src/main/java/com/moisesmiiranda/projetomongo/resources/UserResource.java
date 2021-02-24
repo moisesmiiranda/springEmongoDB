@@ -19,34 +19,40 @@ import com.moisesmiiranda.projetomongo.domain.User;
 import com.moisesmiiranda.projetomongo.dto.UserDTO;
 import com.moisesmiiranda.projetomongo.services.UserService;
 
-
 @RestController
-@RequestMapping(value="/users")
-public class UserResource {//controlador rest
-	
-	@Autowired
-	private UserService service;//acessa o serviço
+@RequestMapping(value = "/users")
+public class UserResource {// controlador rest
 
-	@RequestMapping(method=RequestMethod.GET)
-	public ResponseEntity<List<UserDTO>> findALL(){
-		List<User> list	= service.findALL();
+	@Autowired
+	private UserService service;// acessa o serviço
+
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<UserDTO>> findALL() {
+		List<User> list = service.findALL();
 		List<UserDTO> listDto = list.stream().map(x -> new UserDTO(x)).collect(Collectors.toList());
-		return ResponseEntity.ok().body(listDto);	
+		return ResponseEntity.ok().body(listDto);
 	}
-	@RequestMapping(value="/{id}", method=RequestMethod.GET)
- 	public ResponseEntity<UserDTO> findById(@PathVariable String id) {
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public ResponseEntity<UserDTO> findById(@PathVariable String id) {
 		User obj = service.findById(id);
 		return ResponseEntity.ok().body(new UserDTO(obj));
 	}
-	
-	//@RequestMapping(method=RequestMethod.POST)
+
+	// @RequestMapping(method=RequestMethod.POST)
 	@PostMapping
- 	public ResponseEntity<Void> insert(@RequestBody UserDTO objDto) {
+	public ResponseEntity<Void> insert(@RequestBody UserDTO objDto) {
 		User obj = service.fromDTO(objDto);
 		obj = service.insert(obj);
-		//cabeçalho contendo o novo conteudo do obj criado
+		// cabeçalho contendo o novo conteudo do obj criado
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-		return ResponseEntity.created(uri).build();//retorna codigo 201
+		return ResponseEntity.created(uri).build();// retorna codigo 201 (sucesso ao criar)
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> delete(@PathVariable String id) {
+		service.delete(id);
+		return ResponseEntity.noContent().build();//retorna codigo 204 (não há retorno)
 	}
 
 }
