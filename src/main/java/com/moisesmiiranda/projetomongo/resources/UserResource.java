@@ -26,12 +26,13 @@ public class UserResource {// controlador rest
 	private UserService service;// acessa o serviço
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<UserDTO>> findALL() {
+	public ResponseEntity<List<UserDTO>> findAll() {
 		List<User> list = service.findALL();
 		List<UserDTO> listDto = list.stream().map(x -> new UserDTO(x)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(listDto);
 	}
-	//Buscar usuario por ID
+
+	// Buscar usuario por ID
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<UserDTO> findById(@PathVariable String id) {
 		User obj = service.findById(id);
@@ -61,7 +62,7 @@ public class UserResource {// controlador rest
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();// retorna codigo 204 (não há retorno)
 	}
-	
+
 	@RequestMapping(value = "/{id}/posts", method = RequestMethod.GET)
 	public ResponseEntity<List<Post>> findPosts(@PathVariable String id) {
 		User obj = service.findById(id);
