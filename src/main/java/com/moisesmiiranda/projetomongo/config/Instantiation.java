@@ -13,7 +13,7 @@ import com.moisesmiiranda.projetomongo.domain.User;
 import com.moisesmiiranda.projetomongo.dto.AuthorDTO;
 import com.moisesmiiranda.projetomongo.repository.PostRepository;
 import com.moisesmiiranda.projetomongo.repository.UserRepository;
-
+//classe responsável pela carga inicial do banco de dados
 @Configuration
 public class Instantiation implements CommandLineRunner {
 
@@ -43,9 +43,11 @@ public class Instantiation implements CommandLineRunner {
 		Post post1 = new Post(null,sdf.parse("21/02/2021"), "Partiu viagem","Indo para Chicaco, Abraços!",new AuthorDTO(maria));
 		Post post2 = new Post(null,sdf.parse("23/02/2021"), "Bom dia!","Lindo dia hoje!",new AuthorDTO(maria));
 		
-		//salvando objetos
-		userRepository.saveAll(Arrays.asList(maria,alex,bob));
+		//salvando posts
 		postRepository.saveAll(Arrays.asList(post1,post2));
+		
+		maria.getPosts().addAll(Arrays.asList(post1,post2));
+		userRepository.save(maria);
 	}
 
 }
