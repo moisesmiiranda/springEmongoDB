@@ -1,6 +1,8 @@
 package com.moisesmiiranda.projetomongo.resources;
 
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.moisesmiiranda.projetomongo.domain.User;
+import com.moisesmiiranda.projetomongo.dto.UserDTO;
 import com.moisesmiiranda.projetomongo.services.UserService;
 
 @RestController
@@ -19,9 +22,10 @@ public class UserResource {//controlador rest
 	private UserService service;//acessa o serviço
 
 	@RequestMapping(method=RequestMethod.GET)
-	public ResponseEntity<List<User>> findALL(){
-		List<User> list	= service.findALL(); 
-		return ResponseEntity.ok().body(list);	
+	public ResponseEntity<List<UserDTO>> findALL(){
+		List<User> list	= service.findALL();
+		List<UserDTO> listDto = list.stream().map(x -> new UserDTO(x)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDto);	
 	}
 	
 
